@@ -1,21 +1,23 @@
+//import modules
 var http = require("http"),
 	url = require("url"),
 	path = require("path"),
 	fs = require("fs"),
 	port = 80;
 
+//change port
+/*TO FIX: make it able to start in different ports, change how httpserver works*/
 var setServerPort = function (p) {
 	port = p;
 }
 
-var httpserver;
-
-
-httpserver = http.createServer(function(request, response) {
-
+//create server
+var httpserver = http.createServer(function(request, response) {
+	//path
 	var uri = url.parse(request.url).pathname,
 		filename = path.join(process.cwd(), uri);
 
+	//let it serve html, css and js
 	var contentTypesByExtension = {
 		'.html': "text/html",
 		'.css':  "text/css",
@@ -23,6 +25,7 @@ httpserver = http.createServer(function(request, response) {
 	};
 
 	fs.exists(filename, function(exists) {
+		//serve 404 if file doesn't exist
 		if(!exists) {
 			response.writeHead(404, {"Content-Type": "text/plain"});
 			response.write("404 Not Found\n");
@@ -33,6 +36,7 @@ httpserver = http.createServer(function(request, response) {
 		if (fs.statSync(filename).isDirectory()) filename += '/index.html';
 
 		fs.readFile(filename, "binary", function(err, file) {
+			//serve 500 in case of error
 			if(err) {        
 				response.writeHead(500, {"Content-Type": "text/plain"});
 				response.write(err + "\n");
@@ -40,6 +44,7 @@ httpserver = http.createServer(function(request, response) {
 				return;
 			}
 
+			//serve file
 			var headers = {};
 			var contentType = contentTypesByExtension[path.extname(filename)];
 			if (contentType) headers["Content-Type"] = contentType;
@@ -51,7 +56,6 @@ httpserver = http.createServer(function(request, response) {
 }) //http.createServer end
 .listen(parseInt(port, 10));
 console.log("Static file server running at\n  => http://localhost:" + port + "/\nCTRL + C to shutdown");
-
 
 //export functions
 module.exports.setServerPort = setServerPort;

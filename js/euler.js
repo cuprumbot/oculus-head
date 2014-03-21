@@ -1,6 +1,7 @@
 var radToDeg = 180 / 3.1415926536;
 var eulerType = 'XZY';
 
+//return appropriate string for each case of gimbal lock
 var getTypeForLock = function (lockType) {
 	if (lockType == 'roll') return 'YZX';
 	else if (lockType == 'pitch') return 'YXZ';
@@ -8,6 +9,8 @@ var getTypeForLock = function (lockType) {
 	else return 'XZY';
 }
 
+//convert quaternion to euler angles
+/*TO FIX: make it return, not display*/
 var getEulerFromQuat = function (data, order) {
 	function clamp(x) { return Math.min(Math.max(x,-1),1); }
 
