@@ -3,13 +3,15 @@
 	<head>
 		<title>vr.js Raw Data</title>
 		<script src="../lib/vr.js"></script>
+		<script src="../lib/three.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
-		<script src="https://rawgithub.com/mrdoob/three.js/master/build/three.js"></script>
 	</head>
   	<body>
 		<canvas id="canvas" width="400" height="800"></canvas>
 
 		<script>
+			var radToDeg = 180 / 3.1415926536; 					//constant
+
 			var socket = io.connect('http://localhost');		//websocket connection
 			
 			var canvas = document.getElementById('canvas');		//draw canvas
@@ -78,21 +80,18 @@
 						} //if (hdmInfo) end
 
 						// get rotation information (quaternion)
-						y += h; ctx.fillText('rotation:', i1, y);
+						y += h; ctx.fillText('Quaternion:', i1, y);
 						y += h; ctx.fillText(state.hmd.rotation[0], i2, y);
 						y += h; ctx.fillText(state.hmd.rotation[1], i2, y);
 						y += h; ctx.fillText(state.hmd.rotation[2], i2, y);
 						y += h; ctx.fillText(state.hmd.rotation[3], i2, y);
+						y += h; ctx.fillText('-----', i2, y);
 
 						//transmit rotation information
-						socket.emit('quaternion', { quaternion: state.hmd.rotation });
+						//socket.emit('quaternion', { quaternion: state.hmd.rotation });
 
-
-						y += h; ctx.fillText('---', i2, y);
-
-						/*
+						//create quaternion object
 						var quat = new THREE.Quaternion();
-
 						quat.set(
 								state.hmd.rotation[0],
 								state.hmd.rotation[1],
@@ -100,15 +99,23 @@
 								state.hmd.rotation[3]
 							);
 
-						var euler = Euler.setFromQuaternion( quat, 'XYZ' );
+						//create euler object
+						var euler = new THREE.Euler(0,0,0,'XZY');
+						euler.setFromQuaternion(quat,'XZY');
+
+						var eulerArray = euler.toArray();
+						eulerArray[0] *= radToDeg;
+						eulerArray[1] *= radToDeg;
+						eulerArray[2] *= radToDeg;
 
 						y += h; ctx.fillText('Euler:', i1, y);
-						y += h; ctx.fillText(euler.x, i2, y);
-						y += h; ctx.fillText(euler.y, i2, y);
-						y += h; ctx.fillText(euler.z, i2, y);
-						*/
-						
-						y += h; ctx.fillText('end', i1, y);
+						y += h; ctx.fillText(eulerArray[0], i2, y);
+						y += h; ctx.fillText(eulerArray[1], i2, y);
+						y += h; ctx.fillText(eulerArray[2], i2, y);
+						y += h; ctx.fillText('-----', i2, y);
+
+						//transmit angle information
+						socket.emit('eulerAngles', { eulerAngles: eulerArray });
 						
 					} else {
 						y += h; ctx.fillText('oculus rift not detected', 0, y);

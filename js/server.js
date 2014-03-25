@@ -55,7 +55,7 @@ var httpserver = http.createServer(function(request, response) {
 	}); //fs.exists() end
 }) //http.createServer end
 .listen(parseInt(port, 10));
-console.log("Static file server running at\n  => http://localhost:" + port + "/\nCTRL + C to shutdown");
+console.log("Static file server running at\n\t=> http://localhost:" + port + "/\nCTRL + C to shutdown");
 
 //export functions
 module.exports.setServerPort = setServerPort;
