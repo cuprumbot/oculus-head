@@ -1,16 +1,11 @@
-// ----- hardware control -----
-var five = require("johnny-five");
-/*var board = new five.Board();*/
-var servox, servoy, servoz;
-var hardware = false;
-
-
-
 // ----- server -----
-var serv = require('./js/server')
+var server = require('./js/server');
 /*TO FIX: make it able to start in different ports*/
 /*serv.setServerPort(process.argv[2]);*/
-var httpserver = serv.httpserver;
+var httpserver = server.httpserver;
+
+// ----- hardware -----
+var hardware = require('./js/hardware');
 
 
 
@@ -31,16 +26,13 @@ io.sockets.on('connection', function (socket) {
 						+ eulerAngles[0].toFixed(1) + "\t"
 						+ eulerAngles[1].toFixed(1) + "\t"
 						+ eulerAngles[2].toFixed(1));
+
+		hardware.moveServo(	eulerAngles[0]+90,
+							eulerAngles[1]+90,
+							90-eulerAngles[2]);
 	});
 });
 
-//ready servos when board is created
 /*
-board.on("ready", function () {
-	servox = new five.Servo(12);
-	servoy = new five.Servo(10);
-	servoz = new five.Servo(13);
 
-	hardware = true;
-});
 */

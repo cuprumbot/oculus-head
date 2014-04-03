@@ -7,7 +7,7 @@
 		<script src="/socket.io/socket.io.js"></script>
 	</head>
   	<body>
-		<canvas id="canvas" width="400" height="800"></canvas>
+		<canvas id="canvas" width="800" height="800"></canvas>
 
 		<script>
 			var radToDeg = 180 / 3.1415926536; 					//constant
@@ -30,11 +30,11 @@
 
 					ctx.clearRect(0, 0, canvas.width, canvas.height);
 					ctx.fillStyle = 'black';
-					ctx.font = '12px monospace';
-					var w = 8;
-					var i0 = w * 0, i1 = w * 1, i2 = w * 2, i3 = w * 3;
-					var h = 12;
-					var y = 0;
+					ctx.font = '30px monospace';
+					var w = 10;
+					var i1 = 200;
+					var h = 30;
+					var y = 200;
 
 					if (!vr.pollState(state)) {
 						y += h; ctx.fillText('NPVR plugin not found/error polling', 0, y);
@@ -42,12 +42,10 @@
 					}
 
 					if (state.hmd.present) {
-						y += h; ctx.fillText('oculus rift detected', 0, y);
 						var hmdInfo = vr.getHmdInfo();
 						
 						if (hmdInfo) {
-							y += h; ctx.fillText('name: ' +
-								hmdInfo.toString(), i1, y);
+							y += h; ctx.fillText(hmdInfo.toString(), i1, y);
 							/*
 							y += h; ctx.fillText('desktop position (px): ' +
 								hmdInfo.desktopX + ',' + hmdInfo.desktopY, i1, y);
@@ -80,27 +78,19 @@
 						} //if (hdmInfo) end
 
 						// get rotation information (quaternion)
-						y += h; ctx.fillText('Quaternion:', i1, y);
-						y += h; ctx.fillText(state.hmd.rotation[0], i2, y);
-						y += h; ctx.fillText(state.hmd.rotation[1], i2, y);
-						y += h; ctx.fillText(state.hmd.rotation[2], i2, y);
-						y += h; ctx.fillText(state.hmd.rotation[3], i2, y);
-						y += h; ctx.fillText('-----', i2, y);
-
-						//transmit rotation information
-						//socket.emit('quaternion', { quaternion: state.hmd.rotation });
+						y += h; ctx.fillText('Quaternion', i1, y);
+						y += h; ctx.fillText(state.hmd.rotation[0], i1, y);
+						y += h; ctx.fillText(state.hmd.rotation[1], i1, y);
+						y += h; ctx.fillText(state.hmd.rotation[2], i1, y);
+						y += h; ctx.fillText(state.hmd.rotation[3], i1, y);
+						y += h; ctx.fillText('-----', i1, y);
 
 						//create quaternion object
 						var quat = new THREE.Quaternion();
-						quat.set(
-								state.hmd.rotation[0],
-								state.hmd.rotation[1],
-								state.hmd.rotation[2],
-								state.hmd.rotation[3]
-							);
+						quat.fromArray(state.hmd.rotation);
 
 						//create euler object
-						var euler = new THREE.Euler(0,0,0,'XZY');
+						var euler = new THREE.Euler();
 						euler.setFromQuaternion(quat,'XZY');
 
 						var eulerArray = euler.toArray();
@@ -108,17 +98,16 @@
 						eulerArray[1] *= radToDeg;
 						eulerArray[2] *= radToDeg;
 
-						y += h; ctx.fillText('Euler:', i1, y);
-						y += h; ctx.fillText(eulerArray[0], i2, y);
-						y += h; ctx.fillText(eulerArray[1], i2, y);
-						y += h; ctx.fillText(eulerArray[2], i2, y);
-						y += h; ctx.fillText('-----', i2, y);
+						y += h; ctx.fillText('Euler', i1, y);
+						y += h; ctx.fillText(eulerArray[0], i1, y);
+						y += h; ctx.fillText(eulerArray[1], i1, y);
+						y += h; ctx.fillText(eulerArray[2], i1, y);
+						y += h; ctx.fillText('-----', i1, y);
 
 						//transmit angle information
 						socket.emit('eulerAngles', { eulerAngles: eulerArray });
-						
 					} else {
-						y += h; ctx.fillText('oculus rift not detected', 0, y);
+						y += h; ctx.fillText('Oculus Rift not detected', 0, y);
 					} //if (state.hmd.present) end
 				}; //function tick() end
 				
