@@ -4,10 +4,14 @@
 		<title>vr.js Raw Data</title>
 		<script src="../lib/vr.js"></script>
 		<script src="../lib/three.js"></script>
+		<script src="../lib/camcanvas.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
 	</head>
-  	<body>
-		<canvas id="canvas" width="800" height="800"></canvas>
+  	<body onload="init()">
+  		<center>
+			<canvas id="canvas" width="600" height="600"></canvas>
+			<video id="v" width="600" height="600"></video>
+		</center>
 
 		<script>
 			var radToDeg = 180 / 3.1415926536; 					//constant
@@ -32,9 +36,9 @@
 					ctx.fillStyle = 'black';
 					ctx.font = '30px monospace';
 					var w = 10;
-					var i1 = 200;
+					var i1 = 0;
 					var h = 30;
-					var y = 200;
+					var y = 100;
 
 					if (!vr.pollState(state)) {
 						y += h; ctx.fillText('NPVR plugin not found/error polling', 0, y);
