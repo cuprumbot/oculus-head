@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Oculus Rift Camera Control</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script src="../lib/vr.js"></script>
+		<script src="../lib/three.js"></script>
+		<script src="../lib/camera-opengl.js"></script>
+		<script src="../lib/camera-simple.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
+	</head>
+  	<body>
+  		<center>
+			<canvas id="rift" width="1280" height="800" style="background: #000;"></canvas>
+			<br>
+			<video id="left" width="600" height="800" style="background: #111"></video>
+			<video id="right" width="600" height="800" style="background: #111"></video>
+			<br>
+			<canvas id="canvas" width="1280" height="200" style="background: #ccc"></canvas>
+		</center>
+
+		<script>
+			var radToDeg = 180 / 3.1415926536; 					//constant
+
+			var socket = io.connect('http://localhost');		//websocket connection
+			
+			var canvas = document.getElementById('canvas');		//draw canvas
+			var ctx = canvas.getContext('2d');
+
+			vr.load(function(error) {
+				
+				if (error) {
+					window.alert('VR error:\n' + error.toString());
+				}
+
+				var state = new vr.State();
+				
+				function tick() {
+					vr.requestAnimationFrame(tick);
+
+					ctx.clearRect(0, 0, canvas.width, canvas.height);
+					ctx.fillStyle = 'black';
+					ctx.font = '20px monospace';
+					var w = 10;
+					var i1 = 10;
+					var h = 18;
+					var y = 10;
+
+					if (!vr.pollState(state)) {
+						y += h; ctx.fillText('NPVR plugin not found/error polling', i1, y);
+						return;
+					}
+
+					if (state.hmd.present) {
+						var hmdInfo = vr.getHmdInfo();
+
+						y += h; ctx.fillText(hmdInfo.toString(), i1, y);
+						
+						/*
+						if (hmdInfo) {
+							y += h; ctx.fillText('desktop position (px): ' +
+								hmdInfo.desktopX + ',' + hmdInfo.desktopY, i1, y);
+							y += h; ctx.fillText('resolution (px): ' +
+								hmdInfo.resolutionHorz + 'x' + hmdInfo.resolutionVert, i1, y);
+							y += h; ctx.fillText('screen size (m): ' +
+								hmdInfo.screenSizeHorz + 'x' + hmdInfo.screenSizeVert, i1, y);
+							y += h; ctx.fillText('screen center (m): ' +
+								hmdInfo.screenCenterVert, i1, y);
+							y += h; ctx.fillText('eye-to-screen (m): ' +
+								hmdInfo.eyeToScreenDistance, i1, y);
+							y += h; ctx.fillText('lens separation (m): ' +
+								hmdInfo.lensSeparationDistance, i1, y);
+							y += h; ctx.fillText('IPD (m): ' +
+								hmdInfo.interpupillaryDistance, i1, y);
+							y += h; ctx.fillText('distortion k: ' +
+								hmdInfo.distortionK[0] + ',' +
+								hmdInfo.distortionK[1] + ',' +
+								hmdInfo.distortionK[2] + ',' +
+								hmdInfo.distortionK[3] + ',', i1, y);
+							y += h; ctx.fillText('chromaAbCorrection[0]: ' +
+								hmdInfo.chromaAbCorrection[0], i1, y);
+							y += h; ctx.fillText('chromaAbCorrection[1]: ' +
+								hmdInfo.chromaAbCorrection[1], i1, y);
+							y += h; ctx.fillText('chromaAbCorrection[2]: ' +
+								hmdInfo.chromaAbCorrection[2], i1, y);
+							y += h; ctx.fillText('chromaAbCorrection[3]: ' +
+								hmdInfo.chromaAbCorrection[3], i1, y);
+						} //if (hdmInfo) end
+						*/
+
+						// get rotation information (quaternion)
+						y += h; ctx.fillText('Quaternion', i1, y);
+						y += h; ctx.fillText(state.hmd.rotation[0], i1, y);
+						y += h; ctx.fillText(state.hmd.rotation[1], i1, y);
+						y += h; ctx.fillText(state.hmd.rotation[2], i1, y);
+						y += h; ctx.fillText(state.hmd.rotation[3], i1, y);
+
+						//create quaternion object
+						var quat = new THREE.Quaternion();
+						quat.fromArray(state.hmd.rotation);
+
+						//create euler object
+						var euler = new THREE.Euler();
+						euler.setFromQuaternion(quat,'YZX');		//YZX and YXZ give the best results
+																	//XYZ, ZXY, XZY and ZYX are also available
+
+						var eulerArray = euler.toArray();
+						eulerArray[0] *= radToDeg;
+						eulerArray[1] *= radToDeg;
+						eulerArray[2] *= radToDeg;
+
+						y += h; ctx.fillText('Euler', i1, y);
+						y += h; ctx.fillText(eulerArray[0], i1, y);
+						y += h; ctx.fillText(eulerArray[1], i1, y);
+						y += h; ctx.fillText(eulerArray[2], i1, y);
+					
+						//transmit angle information
+						socket.emit('eulerAngles', { eulerAngles: eulerArray });
+					} else {
+						y += h; ctx.fillText('Oculus Rift not detected', i1, y);
+					} //if (state.hmd.present) end
+				}; //function tick() end
+				
+				vr.requestAnimationFrame(tick);
+			}); //vr.load() end
+		</script>
+	</body>
+</html>

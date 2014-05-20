@@ -25,7 +25,7 @@ var disableHardware = function () {
 //move servos
 var moveServo = function (pitch, yaw, roll) {
 	if (hardware) {
-		servoRoll.to(roll+5);
+		servoRoll.to(roll);
 		servoPitch.to(pitch);
 		servoYaw.to(yaw);
 	}

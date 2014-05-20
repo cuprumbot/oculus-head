@@ -6,7 +6,6 @@ var http = require("http"),
 	port = 80;
 
 //change port
-/*TO FIX: make it able to start in different ports, change how httpserver works*/
 var setServerPort = function (p) {
 	port = p;
 }
