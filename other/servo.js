@@ -19,6 +19,10 @@ board.on("ready", function() {
     servo12: servo12
   });
 
+  servo10.center();
+  servo11.center();
+  servo12.center();
+
   // Servo API
 
   // min()
@@ -59,3 +63,21 @@ board.on("ready", function() {
   //
   // servo.sweep();
 });
+
+allMin = function () {
+  servo10.min();
+  servo11.min();
+  servo12.min();
+}
+
+allMax = function () {
+  servo10.max();
+  servo11.max();
+  servo12.max();
+}
+
+allCenter = function () {
+  servo10.center();
+  servo11.center();
+  servo12.center();
+}
