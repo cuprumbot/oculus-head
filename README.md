@@ -4,6 +4,9 @@ oculus-head
 Computer vision and hardware control using an Oculus Rift.
 
 
+https://www.youtube.com/watch?v=Utfqb0U_Adk
+
+
 Read data from Oculus Rift
 https://github.com/benvanik/vr.js
 
