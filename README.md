@@ -3,7 +3,11 @@ oculus-head
 
 Telepresence robot controlled by Oculus Rift.
 
-[Demo video.](https://www.youtube.com/watch?v=ekW61vU_loQ) Better video and english version coming soon.
+
+
+[Demo video](https://www.youtube.com/watch?v=ekW61vU_loQ) of the current state of the project (better video and english version coming soon). The old version can be found inside the folder 'old-demo'.
+
+
 
 Read data from Oculus Rift using [vr.js](https://github.com/benvanik/vr.js)
 
