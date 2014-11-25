@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html>
+
+<head> 
+	<title>Client</title>
+
+	<style>
+#cameras {
+	position 	: absolute;
+	top 		: 150px;
+	left 		: 0px;
+	width		: 960px;
+	height		: 540px;
+	background	: #888;
+	image-rendering			: -moz-crisp-edges;
+	image-rendering			: -o-crisp-edges;
+	image-rendering			: -webkit-optimize-contrast;
+	-ms-interpolation-mode	: nearest-neighbor;
+}
+
+#log {
+	font-size : 200%;
+}
+	</style>
+
+	<script src="js/client-mobile.js"></script>
+
+	<script>
+function handleOrientation (event) {
+	var x = event.beta;
+	var y = event.gamma;
+	var z = event.alpha;
+
+	//write("x: " + x + "<br>y: " + y + "<br>z: " + z);
+
+	//Android default browser
+	var eulerDeg = [y-90,z,x,2];
+
+	//Firefox: solo ver hacia arriba
+	
+	socket.emit("angles", {eulerAngles:eulerDeg});
+}
+
+window.addEventListener('deviceorientation', handleOrientation);
+	</script>
+	
+	<script src="lib/binary.js"></script>
+	<script src="lib/vr.js"></script>
+	<script src="lib/three.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body>
+	<div id="log"></div>
+	<canvas id="cameras" width="640" height="400"></canvas>
+</body>
+
+</html>

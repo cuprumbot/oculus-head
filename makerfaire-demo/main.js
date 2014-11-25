@@ -33,7 +33,7 @@ io.sockets.on('connection', function (socket) {
 
 		if (usingHardware) {
 			hardware.moveServo(	eulerAngles[0]+90,
-								eulerAngles[1]+90,
+								90-eulerAngles[1],
 								90-eulerAngles[2]);
 		}
 	});

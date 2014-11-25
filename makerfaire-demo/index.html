@@ -47,7 +47,6 @@
 						var euler = new THREE.Euler();
 						euler.setFromQuaternion(quat,'YZX');		//YZX and YXZ give the best results
 																	//XYZ, ZXY, XZY and ZYX are also available
-
 						var eulerArray = euler.toArray();
 						eulerArray[0] *= radToDeg;
 						eulerArray[1] *= radToDeg;
