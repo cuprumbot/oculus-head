@@ -2,7 +2,7 @@
 <html>
 
 <head> 
-	<title>Client</title>
+	<title>Mobile client</title>
 
 	<style>
 #cameras {
@@ -26,6 +26,9 @@
 	<script src="js/client-mobile.js"></script>
 
 	<script>
+var first = true;
+var center = 90;
+
 function handleOrientation (event) {
 	var x = event.beta;
 	var y = event.gamma;
@@ -35,6 +38,22 @@ function handleOrientation (event) {
 
 	//Android default browser
 	var eulerDeg = [y-90,z,x,2];
+
+	/* pruebas locales con yaw */
+	if (first) {
+		center = z;
+		first = false;
+	}
+
+	var yaw = (z + 720 + 90 - center) % 360;
+
+	yaw = (yaw > 270) ? 0 : yaw;
+	yaw = (yaw > 180) ? 180 : yaw;
+
+	yaw = 180 - yaw;
+
+	write(z + "   " + yaw);
+	/* fin de pruebas */
 
 	//Firefox: solo ver hacia arriba
 	

@@ -110,12 +110,12 @@ io.sockets.on('connection', function (socket) {
 		eulerAngles[2] = oculusData.eulerAngles[2];
 		eulerAngles[3] = oculusData.eulerAngles[3];
 
-		/*
+		
 		console.log("Euler Angles\t"
 				+ eulerAngles[0].toFixed(1) + "\t"
 				+ eulerAngles[1].toFixed(1) + "\t"
 				+ eulerAngles[2].toFixed(1));
-		*/
+		
 		
 		if (usingArduino) {
 			arduino.moveServo( eulerAngles[0]+90, 90-eulerAngles[1], 90-eulerAngles[2], eulerAngles[3] );

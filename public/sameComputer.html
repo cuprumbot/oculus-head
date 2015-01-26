@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Same Computer</title>
+		<script src="lib/binary.js"></script>
+		<script src="lib/jquery.min.js"></script>
+		<script src="lib/vr.js"></script>
+		<script src="lib/three.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
+
+		<script> var fps = 30; </script>
+		<script src="js/sameComputer.js"></script>
+	</head>
+
+	<body>
+		<video id="videoId1" width="0" height="0" style="background: #000;"></video>
+		<video id="videoId2" width="0" height="0" style="background: #000;"></video>
+		<canvas id="canvasId" width="1280" height="800" style="background: #000;"></canvas>
+		<div id="log"></div>
+
+		<script>
+
+		var RADTODEG = 180 / 3.1415926563;
+
+		var socket = io.connect();
+		socket.emit('test', { data:"test" });
+		
+		vr.load(function(error) {
+
+			if (error) {
+				window.alert('VR error:\n' + error.toString);
+			} else {
+				window.alert('VR OK!');
+			}
+
+			var state = new vr.State();
+
+			function tick() {
+				vr.requestAnimationFrame(tick);
+				if (!vr.pollState(state)) return;
+
+				if (state.hmd.present) {
+					var hmdInfo = vr.getHmdInfo();
+
+					//quaternion
+					var quat = new THREE.Quaternion();
+					quat.fromArray(state.hmd.rotation);
+					//euler
+					var euler = new THREE.Euler();
+					euler.setFromQuaternion(quat, 'YZX');
+					var eulerDeg = euler.toArray();
+					eulerDeg[0] *= RADTODEG;
+					eulerDeg[1] *= RADTODEG;
+					eulerDeg[2] *= RADTODEG;
+					eulerDeg[3] = 1;
+
+					console.log(eulerDeg);
+
+					socket.emit('angles', { eulerAngles:eulerDeg });
+				}; // state.hmd.present
+			} // tick
+
+			vr.requestAnimationFrame(tick);
+		}); // vr.load
+
+		</script>
+	</body>
+</html>

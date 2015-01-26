@@ -6,20 +6,20 @@ board = new five.Board();
 board.on("ready", function() {
 
   // Create a new `servo` hardware instance.
-  servo10 = new five.Servo({pin:10, range:[20,160]});
-  servo11 = new five.Servo({pin:11, range:[20,160]});
+  izq = new five.Servo({pin:10, range:[60,100]});
+  der = new five.Servo({pin:11, range:[80,120]});
   //servo12 = new five.Servo({pin:12, range:[50:130]});
 
   // Inject the `servo` hardware into
   // the Repl instance's context;
   // allows direct command line access
   board.repl.inject({
-    servo10: servo10,
-    servo11: servo11
+    izq: izq,
+    der: der
   });
 
-  servo10.center();
-  servo11.center();
+  //izq.center();
+  //der.center();
   //servo12.center();
 
   // Servo API
@@ -63,20 +63,32 @@ board.on("ready", function() {
   // servo.sweep();
 });
 
+fu = function (iz, de) {
+  izq.to(60);
+  der.to(120);
+  setTimeout(function() {
+      izq.to(iz);
+      der.to(de);
+      console.log(iz + " " + de);
+  }, 1000);
+}
+
+/*
 allMin = function () {
-  servo10.min();
-  servo11.min();
+  izq.min();
+  der.min();
   //servo12.min();
 }
 
 allMax = function () {
-  servo10.max();
-  servo11.max();
+  izq.max();
+  der.max();
   //servo12.max();
 }
 
 allCenter = function () {
-  servo10.center();
-  servo11.center();
+  izq.center();
+  der.center();
   //servo12.center();
 }
+*/
