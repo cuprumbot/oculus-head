@@ -113,5 +113,5 @@ $( function init () {
 
 	log("Attempting first draw...");
 	//draw(canvasContext, video1, TRANS_VID1_X, TRANS_VID1_Y, CAM_WIDTH, CAM_HEIGHT, Math.PI*3/2, video2, TRANS_VID2_X, TRANS_VID2_Y, CAM_WIDTH, CAM_HEIGHT, Math.PI*1/2);
-	draw(canvasContext, video1, TRANS_VID1_X, TRANS_VID1_Y, CAM_WIDTH, CAM_HEIGHT, Math.PI*3/2, video2, TRANS_VID1_X+(CANV_WIDTH/2), TRANS_VID1_Y+30, CAM_WIDTH, CAM_HEIGHT, Math.PI*3/2);
+	draw(canvasContext, video1, TRANS_VID1_X, TRANS_VID1_Y+25, CAM_WIDTH, CAM_HEIGHT, Math.PI*3/2, video2, TRANS_VID1_X+(CANV_WIDTH/2), TRANS_VID1_Y-25, CAM_WIDTH, CAM_HEIGHT, Math.PI*3/2);
 } );
